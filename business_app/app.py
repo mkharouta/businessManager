@@ -1,9 +1,9 @@
 import os
 import psycopg2
 import psycopg2.extras
-from flask import Flask, g, jsonify
+from flask import Flask, g, jsonify, render_template
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 # --- Database Connection ---
 def get_db():
@@ -35,18 +35,32 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-# --- Routes ---
+# --- UI Routes ---
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def index():
+    """
+    Renders the main admin dashboard page.
+    """
+    return render_template('index.html')
 
-@app.route('/contacts')
-def get_contacts():
+@app.route('/contacts-ui')
+def contacts_ui():
+    """
+    Fetches all contacts from the database and renders the contacts UI page.
+    """
+    db = get_db()
+    with db.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+        cur.execute("SELECT * FROM contacts ORDER BY id ASC;")
+        contacts = [dict(row) for row in cur.fetchall()]
+    return render_template('contacts.html', contacts=contacts)
+
+# --- API Routes ---
+@app.route('/api/contacts')
+def get_contacts_api():
     """
     Fetches all contacts from the database and returns them as JSON.
     """
     db = get_db()
-    # Use DictCursor to get rows as dictionaries, which jsonify can handle
     with db.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
         cur.execute("SELECT * FROM contacts ORDER BY id ASC;")
         contacts_list = [dict(row) for row in cur.fetchall()]
