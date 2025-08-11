@@ -63,12 +63,33 @@ with conn.cursor() as cur:
         created_at TIMESTAMPTZ DEFAULT NOW(),
         updated_at TIMESTAMPTZ DEFAULT NOW()
     );
+
+    CREATE TABLE IF NOT EXISTS records (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        record_type VARCHAR(100),
+        record_date DATE,
+        contact_id INTEGER REFERENCES contacts(id) ON DELETE SET NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS attachments (
+        id SERIAL PRIMARY KEY,
+        record_id INTEGER NOT NULL REFERENCES records(id) ON DELETE CASCADE,
+        filename VARCHAR(255) NOT NULL,
+        filepath VARCHAR(1024) NOT NULL,
+        mimetype VARCHAR(255),
+        filesize BIGINT,
+        uploaded_at TIMESTAMPTZ DEFAULT NOW()
+    );
     """)
 
     # We can also add a trigger to automatically update the updated_at timestamp.
     # For now, the application logic will handle this.
 
-    print("Table 'contacts' successfully created or already exists.")
+    print("Tables 'contacts', 'records', and 'attachments' successfully created or already exist.")
 
 conn.commit()
 conn.close()
