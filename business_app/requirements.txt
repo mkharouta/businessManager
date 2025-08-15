@@ -1,2 +1,8 @@
 Flask
 psycopg2-binary
+Flask-Login
+Flask-WTF
+Werkzeug
+stripe
+requests
+coinbase-commerce

@@ -84,6 +84,28 @@ with conn.cursor() as cur:
         filesize BIGINT,
         uploaded_at TIMESTAMPTZ DEFAULT NOW()
     );
+
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) UNIQUE NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        status VARCHAR(50) NOT NULL DEFAULT 'active', -- e.g., 'active', 'inactive'
+        created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS transactions (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        payment_method VARCHAR(50) NOT NULL,
+        amount_charged DECIMAL(20, 8) NOT NULL,
+        currency_charged VARCHAR(10) NOT NULL,
+        amount_paid_fiat DECIMAL(10, 2),
+        transaction_fee DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+        status VARCHAR(50) NOT NULL DEFAULT 'pending', -- e.g., pending, succeeded, failed
+        payment_processor_ref VARCHAR(255) UNIQUE,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
     """)
 
     # We can also add a trigger to automatically update the updated_at timestamp.
