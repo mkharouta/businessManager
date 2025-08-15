@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}{% if contact %}Edit Contact{% else %}New Contact{% endif %}{% endblock %}
+
+{% block content %}
+    <h1>{% if contact %}Edit Contact{% else %}Create a New Contact{% endif %}</h1>
+
+    <form method="POST" action="{% if contact %}/contacts/{{ contact.id }}/edit{% else %}/contacts/new{% endif %}">
+        <fieldset>
+            <legend>Core Information</legend>
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name" id="first_name" value="{{ contact.first_name if contact else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" name="last_name" id="last_name" value="{{ contact.last_name if contact else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" value="{{ contact.email if contact else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="phone_number">Phone Number</label>
+                <input type="tel" name="phone_number" id="phone_number" value="{{ contact.phone_number if contact else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea name="address" id="address" rows="3">{{ contact.address if contact else '' }}</textarea>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Business Context</legend>
+            <div class="form-group">
+                <label for="company">Company</label>
+                <input type="text" name="company" id="company" value="{{ contact.company if contact else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="job_title">Job Title</label>
+                <input type="text" name="job_title" id="job_title" value="{{ contact.job_title if contact else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="relationship">Relationship</label>
+                <input type="text" name="relationship" id="relationship" value="{{ contact.relationship if contact else '' }}">
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Demographic Information</legend>
+            <div class="form-group">
+                <label for="date_of_birth">Date of Birth</label>
+                <input type="date" name="date_of_birth" id="date_of_birth" value="{{ contact.date_of_birth if contact else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <input type="text" name="gender" id="gender" value="{{ contact.gender if contact else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="occupation">Occupation</label>
+                <input type="text" name="occupation" id="occupation" value="{{ contact.occupation if contact else '' }}">
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Psychological Profile</legend>
+            <div class="form-group">
+                <label for="current_trait">Current Trait</label>
+                <input type="text" name="current_trait" id="current_trait" value="{{ contact.current_trait if contact else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="profile_notes">Profile Notes</label>
+                <textarea name="profile_notes" id="profile_notes" rows="4">{{ contact.profile_notes if contact else '' }}</textarea>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="personality_openness">Openness (1-10)</label>
+                    <input type="number" name="personality_openness" id="personality_openness" min="1" max="10" value="{{ contact.personality_openness if contact else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="personality_conscientiousness">Conscientiousness (1-10)</label>
+                    <input type="number" name="personality_conscientiousness" id="personality_conscientiousness" min="1" max="10" value="{{ contact.personality_conscientiousness if contact else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="personality_extraversion">Extraversion (1-10)</label>
+                    <input type="number" name="personality_extraversion" id="personality_extraversion" min="1" max="10" value="{{ contact.personality_extraversion if contact else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="personality_agreeableness">Agreeableness (1-10)</label>
+                    <input type="number" name="personality_agreeableness" id="personality_agreeableness" min="1" max="10" value="{{ contact.personality_agreeableness if contact else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="personality_neuroticism">Neuroticism (1-10)</label>
+                    <input type="number" name="personality_neuroticism" id="personality_neuroticism" min="1" max="10" value="{{ contact.personality_neuroticism if contact else '' }}">
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Interaction History</legend>
+            <div class="form-group">
+                <label for="history">History</label>
+                <textarea name="history" id="history" rows="6">{{ contact.history if contact else '' }}</textarea>
+            </div>
+        </fieldset>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{% if contact %}Save Changes{% else %}Create Contact{% endif %}</button>
+            <a href="/contacts-ui" class="btn">Cancel</a>
+        </div>
+    </form>
+{% endblock %}
